@@ -19,5 +19,5 @@ const EnvConfig = {
 export default {
   env,//开发环境
   mock: true, //是否启用mock
-  ...EnvConfig[env] //解构出开发环境
+  ...EnvConfig[env] //解构出对应的开发环境
 }
