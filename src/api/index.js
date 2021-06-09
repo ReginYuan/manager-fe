@@ -14,8 +14,7 @@ export default {
     return request({
       url: '/users/login',
       method: 'post',
-      data: params,
-      mock: true
+      data: params
     })
   }
 }

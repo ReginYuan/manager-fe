@@ -7,7 +7,11 @@
           <el-input prefix-icon="el-icon-user" v-model="user.userName" />
         </el-form-item>
         <el-form-item prop="userPwd">
-          <el-input prefix-icon="el-icon-view" v-model="user.userPwd" />
+          <el-input
+            prefix-icon="el-icon-view"
+            show-password
+            v-model="user.userPwd"
+          />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" class="btn-login" @click="login"
@@ -49,7 +53,7 @@ export default {
             console.log(res)
             // 保存数据
             this.$store.commit('saveUserInfo', res)
-            // this.$router.push('/welcome')
+            this.$router.push('/welcome')
           })
         } else {
           return false
