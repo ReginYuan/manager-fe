@@ -59,6 +59,11 @@ function request (options) {
     // 转换类型
     options.params = options.data;
   }
+  // 如果mock接口不是undefined
+  if (typeof options.mock != 'undefined') {
+    //设置的mook覆盖全局的moock
+    config.mock = options.mock
+  }
   // 如果是生产环境
   if (config.env === 'prod') {
     // 就将baseApi指向config.baseApi 线上地址
