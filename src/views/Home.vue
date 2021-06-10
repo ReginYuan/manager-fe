@@ -9,46 +9,35 @@
         </div>
         <!-- 导航菜单 -->
         <el-menu
-          default-active="2"
+          :default-active="activeMenu"
           background-color="#001529"
           text-color="#fff"
           router
           :collapse="isCollapse"
           class="nav-menu"
         >
-          <!--el-submenu父菜单  -->
-          <el-submenu index="1">
-            <template #title>
-              <i class="el-icon-setting"></i>
-              <span>系统管理</span>
-            </template>
-            <!--el-menu-item子菜单  -->
-            <el-menu-item index="1-1">用户管理 </el-menu-item>
-            <el-menu-item index="1-2"> 菜单管理 </el-menu-item>
-          </el-submenu>
-          <el-submenu index="2">
-            <template #title>
-              <i class="el-icon-setting"></i>
-              <span>审批管理</span>
-            </template>
-            <!--el-menu-item子菜单  -->
-            <el-menu-item index="2-1">休假申请</el-menu-item>
-            <el-menu-item index="2-2">待我审批</el-menu-item>
-          </el-submenu>
+          <TreeMenu :userMenu="menuList" />
         </el-menu>
       </div>
       <div :class="['content-right', isCollapse ? 'fold' : 'unfold']">
         <div class="nav-top">
           <div class="nav-left">
+            <!-- 左侧菜单栏隐藏按钮 -->
             <div class="menu-fold" @click="toggle">
               <i class="el-icon-s-fold"></i>
             </div>
             <div class="bread">面包屑</div>
           </div>
           <div class="user-info">
-            <el-badge :is-dot="true" class="notice" type="danger">
+            <!-- 通知 -->
+            <el-badge
+              :is-dot="noticeCount > 0 ? true : false"
+              class="notice"
+              type="danger"
+            >
               <i class="el-icon-bell"></i>
             </el-badge>
+            <!-- 退出和用户信息 -->
             <el-dropdown @command="handleLogout" :hide-on-click="false">
               <span class="user-link">
                 {{ userInfo.userName }}
@@ -56,9 +45,9 @@
               </span>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item command="email">{{
-                    userInfo.userEmail
-                  }}</el-dropdown-item>
+                  <el-dropdown-item command="email">
+                    邮箱：{{ userInfo.userEmail }}
+                  </el-dropdown-item>
                   <el-dropdown-item command="logout">退出</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
@@ -75,16 +64,24 @@
   </div>
 </template>
 <script>
+import TreeMenu from './../components/TreeMenu.vue'
 export default {
   name: "Home",
   data () {
     return {
-      isCollapse: false,
-      userInfo: {
-        userName: 'ReginYuan',
-        userEmail: "ReginYuan@admin.com"
-      }
+      isCollapse: false,//控制侧边菜单显示
+      userInfo: this.$store.state.userInfo,//获取登录用户信息
+      noticeCount: 0,//通知数量
+      menuList: [], //菜单列表
+      activeMenu: location.hash.slice(1) //默认选中菜单
     }
+  },
+  components: {
+    TreeMenu
+  },
+  mounted () {
+    this.getNoticeCount();
+    this.getMenuList();
   },
   methods: {
     // 退出功能
@@ -99,7 +96,27 @@ export default {
     // 控制左侧菜单隐藏
     toggle () {
       this.isCollapse = !this.isCollapse
-    }
+    },
+    // 获取通知信息总数
+    async getNoticeCount () {
+      try {
+        // 请求消息api,获取通知数量
+        const count = await this.$api.noticeCount();
+        this.noticeCount = count;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    // 获取菜单列表
+    async getMenuList () {
+      try {
+        // 请求消息api,获取菜单列表
+        const list = await this.$api.getMenuList();
+        this.menuList = list;
+      } catch (error) {
+        console.error(error);
+      }
+    },
   }
 }
 </script>

@@ -49,6 +49,7 @@ export default {
       // 请求登录接口
       this.$refs.userFrom.validate((valid) => {
         if (valid) {
+          // 向登录接口提交请求
           this.$api.login(this.user).then((res) => {
             console.log(res)
             // 保存数据
