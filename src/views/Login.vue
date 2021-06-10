@@ -64,7 +64,7 @@ export default {
   }
 }
 </script>
-<style  lang="scss" scoped>
+<style  lang="scss" >
 .login-wrapper {
   display: flex;
   justify-content: center;
