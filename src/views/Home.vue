@@ -26,7 +26,10 @@
             <div class="menu-fold" @click="toggle">
               <i class="el-icon-s-fold"></i>
             </div>
-            <div class="bread">面包屑</div>
+            <!-- 面包屑 -->
+            <div class="bread">
+              <BreadCrumb />
+            </div>
           </div>
           <div class="user-info">
             <!-- 通知 -->
@@ -65,6 +68,7 @@
 </template>
 <script>
 import TreeMenu from './../components/TreeMenu.vue'
+import BreadCrumb from './../components/BreadCrumb.vue'
 export default {
   name: "Home",
   data () {
@@ -77,7 +81,8 @@ export default {
     }
   },
   components: {
-    TreeMenu
+    TreeMenu,
+    BreadCrumb
   },
   mounted () {
     this.getNoticeCount();
