@@ -18,7 +18,7 @@ const EnvConfig = {
 }
 export default {
   env,//开发环境
-  mock: true, //是否启用mock
+  mock: false, //是否启用mock
   namespace: 'manager',//命名空间用于区分storage
   ...EnvConfig[env] //解构出对应的开发环境
 }

@@ -2,13 +2,13 @@
  * Mutations 业务层数据提交
  *
  */
-import storage from './../utils/storage.js'
-
+import storage from './../utils/storage'
 
 export default {
-  // 保存数据信息
-  saveUserInfo (stata, userInfo) {
-    stata.userInfo = userInfo;
-    storage.setItem('userInfo', userInfo)
-  }
+    saveUserInfo (state, userInfo) {
+        state.userInfo = userInfo;
+        storage.setItem('userInfo', userInfo)
+        console.log('userInfo=>', storage.getItem('userInfo'))
+        console.log('state userInfo=>', state.userInfo)
+    }
 }

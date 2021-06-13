@@ -51,9 +51,9 @@ export default {
         if (valid) {
           // 向登录接口提交请求
           this.$api.login(this.user).then((res) => {
-            console.log(res)
             // 保存数据
             this.$store.commit('saveUserInfo', res)
+            console.log('login res', res)
             this.$router.push('/welcome')
           })
         } else {

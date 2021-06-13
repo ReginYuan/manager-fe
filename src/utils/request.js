@@ -3,11 +3,12 @@
 */
 
 import axios from 'axios'
-import { ElMessage } from 'element-plus';
-import router from '../router/index.js'
-import config from '../config/index.js'
+import config from './../config'
+import { ElMessage } from 'element-plus'
+import router from './../router'
+import storage from './storage'
 
-//设置自定义报错
+// 自定义报错
 const TOKEN_INVALID = 'Token认证失败，请重新登录'
 const NETWORK_ERROR = '网络请求异常，请稍后重试'
 
@@ -17,11 +18,12 @@ const service = axios.create({
   timeout: 8000
 })
 
+
 // 请求拦截
 service.interceptors.request.use((req) => {
-  //TO-DO
   const headers = req.headers;
-  if (!headers.Authorization) headers.Authorization = "ReginYuan"
+  const { token = "" } = storage.getItem('userInfo') || {};
+  if (!headers.Authorization) headers.Authorization = 'Bearer ' + token;
   return req;
 })
 

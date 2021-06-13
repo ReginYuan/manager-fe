@@ -22,7 +22,7 @@ export default {
   },
   mounted () {
     // 路由详情
-    console.log('路由:routes=>', this.$route)
+    // console.log('路由:routes=>', this.$route)
   }
 }
 </script>
