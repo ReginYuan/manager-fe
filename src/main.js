@@ -10,7 +10,7 @@ import store from './store/index.js'
 // 创建app实例
 const app = createApp(App)
 // 使用ElementPlus组件库
-app.use(ElementPlus)
+app.use(ElementPlus, { szie: 'small' })
 // 现在获取环境变量的方式
 console.log("环境变量=>", import.meta.env)
 // 全局挂载request
