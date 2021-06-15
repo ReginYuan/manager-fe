@@ -42,5 +42,18 @@ export default {
       data: {},
       mock: true
     })
+  },
+  /**
+  * 用户管理列表接口
+  * @param {Object} params
+  * @return
+  */
+  getUserList (params) {
+    return request({
+      url: '/users/list',
+      method: 'get',
+      data: params,
+      mock: true
+    })
   }
 }

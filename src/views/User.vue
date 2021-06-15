@@ -1,14 +1,15 @@
 <template>
   <div class="user-manage">
+    <!-- 搜索模块 -->
     <div class="query-form">
-      <el-form inline="true" :model="user">
-        <el-form-item>
+      <el-form ref="refForm" :inline="true" :model="user">
+        <el-form-item label="用户ID" prop="userId">
           <el-input v-model="user.userId" placeholder="请输入用户ID" />
         </el-form-item>
-        <el-form-item>
+        <el-form-item label="用户名称" prop="userName">
           <el-input v-model="user.userName" placeholder="请输入用户名称" />
         </el-form-item>
-        <el-form-item>
+        <el-form-item label="状态" prop="state">
           <el-select v-model="user.state">
             <el-option :value="0" label="所有"></el-option>
             <el-option :value="1" label="在职"></el-option>
@@ -17,11 +18,12 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">查询</el-button>
-          <el-button>重置</el-button>
+          <el-button type="primary" @click="handleQuery">查询</el-button>
+          <el-button @click="handleReset">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
+    <!-- 用户列表模块 -->
     <div class="base-table">
       <div class="action">
         <el-button type="primary">新增</el-button>
@@ -46,41 +48,42 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页功能 -->
+      <el-pagination
+        class="pagination"
+        background
+        layout="prev, pager, next"
+        :total="pager.total"
+        :page-size="pager.pageSize"
+        @current-change="handleCurrentChange"
+      >
+      </el-pagination>
     </div>
   </div>
 </template>
 
 <script>
-import { onMounted, reactive, ref } from 'vue'
+import { getCurrentInstance, onMounted, reactive, ref } from 'vue'
 export default {
   name: 'User',
   setup () {
-    // 响应式对象
-    const user = reactive({});
-    const userList = ref([
-      {
-        "state": 1,
-        "role": "0",
-        "rolelist": [
-          "60180b07bleaed6c45fbebdb",
-          "60150cb764de99631b2c3cd3",
-          "60180b59bleaed6c45fbebde"
-        ],
-        "deptId": [
-          "6016705999027b7d28520a61",
-          "60167345c6a4417E2827506f"
-        ],
-        "userId": 1000002,
-        "userName": "admin",
-        "userEmail": "admin@imooc.com",
-        "createTime": "2021-01-17T13:32:06.3812",
-        "lastLoginTime": "2021-01-17T13:32:06.3812",
-        "v": 0,
-        "job": "前端架构师",
-        "mobile": "17611020000"
-      }
 
-    ]);
+    // 获取composition API上下文对象
+    const { ctx } = getCurrentInstance()
+
+    // 初始化用表单对象
+    const user = reactive({
+      state: 0
+    });
+    // 初始化用户列表数据
+    const userList = ref([]);
+    //初始化用户分页对象
+    const pager = reactive({
+      pageNum: 1,
+      pageSize: 10,
+      total: 24
+    })
+    // 定义动态表格-格式
     const columns = reactive([
       {
         label: '用户ID',
@@ -112,16 +115,45 @@ export default {
       }
     ]);
 
-    // 渲染
+    // 初始化接口调用
     onMounted(() => {
-      console.log('init....')
+      getUserList()
     });
+    // 获取用户列表
+    const getUserList = async () => {
+      // 解构用户数据和分页数据
+      let params = { ...user, ...pager };
 
+      try {
+        // 通过上下文对象获取vue3中的请求对象,并将数据传输到接口
+        const { list, page } = await ctx.$api.getUserList(params)
+        userList.value = list;
+        pager.total = page.total;
+
+      } catch (error) {
+
+      }
+
+    }
+    //  查询事件,获取用户列表
+    const handleQuery = () => {
+      getUserList();
+    }
+    //重置查询列表
+    const handleReset = () => {
+      ctx.$refs.refForm.resetFields();
+    }
+
+    // 分页事件处理 current页数
+    const handleCurrentChange = (current) => {
+      pager.pageNum = current;
+      getUserList();
+    }
     return {
-      user, userList, columns
+      user, userList, pager, columns, getUserList, handleQuery, handleReset, handleCurrentChange
     }
   }
 }
-</script>
+</script> 
 <style lang="scss" scoped>
 </style>

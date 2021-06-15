@@ -18,7 +18,7 @@ const routes = [
         component: () => import('@/views/Welcome.vue'),
       },
       {
-        name: 'user',
+        name: '/user',
         path: 'user',
         meta: {
           title: '用户管理'
