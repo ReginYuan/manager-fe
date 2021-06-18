@@ -26,7 +26,7 @@
     <!-- 用户列表模块 -->
     <div class="base-table">
       <div class="action">
-        <el-button type="primary">新增</el-button>
+        <el-button @click="handleCrate" type="primary">新增</el-button>
         <el-button @click="handlePatchDel" type="danger">批量删除</el-button>
       </div>
       <el-table :data="userList" @selection-change="handleSelectionChange">
@@ -62,6 +62,64 @@
       >
       </el-pagination>
     </div>
+    <!-- 增加用户弹窗 -->
+    <el-dialog title="新增用户" v-model="showModal">
+      <el-form
+        ref="dialogForm"
+        :model="userForm"
+        label-width="100px"
+        :rules="rules"
+      >
+        <el-form-item label="用户名" prop="userName">
+          <el-input v-model="userForm.userName" placeholder="请输入用户名称" />
+        </el-form-item>
+        <el-form-item label="用户邮箱" prop="userEmail">
+          <el-input v-model="userForm.userEmail" placeholder="请输入用户邮箱">
+            <!-- 插槽 -->
+            <template #append> qq.com</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="手机号" prop="mobile">
+          <el-input v-model="userForm.mobile" placeholder="请输入手机号" />
+        </el-form-item>
+        <el-form-item label="岗位" prop="job">
+          <el-input v-model="userForm.job" placeholder="请输入岗位" />
+        </el-form-item>
+        <el-form-item label="状态" prop="state">
+          <el-select v-model="userForm.state">
+            <el-option :value="1" label="在职"></el-option>
+            <el-option :value="2" label="离职"></el-option>
+            <el-option :value="3" label="试用期"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="系统角色" prop="roleList">
+          <el-select
+            v-model="userForm.roleList"
+            placeholder="请选择用户系统角色"
+          >
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="所属部门" prop="deptId">
+          <!-- 级联选择器 -->
+          <el-cascader
+            v-model="userForm.deptId"
+            placeholder="请选择所属部门"
+            :options="[]"
+            :props="{ checkStrictly: true, value: '_id', label: 'deptName' }"
+            clearable
+          ></el-cascader>
+        </el-form-item>
+      </el-form>
+      <!-- 确认取消按钮 插槽 -->
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button>取 消</el-button>
+          <el-button type="primary">确 定</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -82,12 +140,55 @@ export default {
     const userList = ref([]);
     // 选择中用户列表的对象
     const checkedUserIds = ref([]);
+
+    // 弹窗显示对象
+    const showModal = ref(false);
+
+    // 新增用户对象
+    const userForm = reactive({
+      userName: '',
+      state: 3
+    })
     //初始化用户分页对象
     const pager = reactive({
       pageNum: 1,
       pageSize: 10,
       total: 24
     })
+
+
+    // 定义表单验证规则
+    const rules = reactive({
+      userName: [
+        {
+          required: true,
+          message: '请输入用户名称',
+          trigger: 'blur'
+        }
+      ],
+      userEmail: [
+        {
+          required: true,
+          message: '请输入用户的邮箱',
+          trigger: 'blur'
+        }
+      ],
+      mobile: [
+        {
+          pattern: /1\d{10}/,
+          message: '请输入正确的手机号格式',
+          trigger: 'blur'
+        }
+      ],
+      deptId: [
+        {
+          required: true,
+          message: '请选择所属部门',
+          trigger: 'blur'
+        }
+      ]
+    })
+
     // 定义动态表格-格式
     const columns = reactive([
       {
@@ -194,6 +295,8 @@ export default {
       }
 
     }
+
+
     //表格多选
     const handleSelectionChange = (list) => {
       let arr = [];
@@ -203,8 +306,14 @@ export default {
       checkedUserIds.value = arr;
     }
 
+    // 新增用户
+    const handleCrate = () => {
+      showModal.value = true
+    }
+
+
     return {
-      user, userList, pager, columns, checkedUserIds, getUserList, handleQuery, handleReset, handleCurrentChange, handleDel, handlePatchDel, handleSelectionChange
+      user, userList, pager, rules, columns, userForm, showModal, handleCrate, checkedUserIds, getUserList, handleQuery, handleReset, handleCurrentChange, handleDel, handlePatchDel, handleSelectionChange
     }
   }
 }
