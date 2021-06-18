@@ -55,5 +55,19 @@ export default {
       data: params,
       mock: true
     })
+  },
+
+  /**
+  * 用户删除
+  * @param {Object} params
+  * @return
+  */
+  UserDel (params) {
+    return request({
+      url: '/users/delete',
+      method: 'post',
+      data: params,
+      mock: true
+    })
   }
 }
