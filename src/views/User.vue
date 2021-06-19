@@ -42,7 +42,7 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="150">
           <template #default="scope">
-            <el-button @click="handleClick(scope.row)" size="mini"
+            <el-button @click="handleEdit(scope.row)" size="mini"
               >编辑</el-button
             >
             <el-button type="danger" @click="handleDel(scope.row)" size="mini"
@@ -71,10 +71,18 @@
         :rules="rules"
       >
         <el-form-item label="用户名" prop="userName">
-          <el-input v-model="userForm.userName" placeholder="请输入用户名称" />
+          <el-input
+            v-model="userForm.userName"
+            placeholder="请输入用户名称"
+            :disabled="action == 'edit'"
+          />
         </el-form-item>
         <el-form-item label="用户邮箱" prop="userEmail">
-          <el-input v-model="userForm.userEmail" placeholder="请输入用户邮箱">
+          <el-input
+            v-model="userForm.userEmail"
+            placeholder="请输入用户邮箱"
+            :disabled="action == 'edit'"
+          >
             <!-- 插槽 -->
             <template #append> qq.com</template>
           </el-input>
@@ -327,7 +335,10 @@ export default {
 
     // 新增用户
     const handleCrate = () => {
-      showModal.value = true
+      // 设置操作为新增
+      action.value = 'add';
+      showModal.value = true;
+
     }
 
     // 部门列表查询
@@ -374,9 +385,42 @@ export default {
       })
     }
 
+    // 编辑用户
+    const handleEdit = (row) => {
+      action.value = "edit";
+      showModal.value = true;
+
+      // $nextTick()获取修改后,崭新的DOM
+      ctx.$nextTick(() => {
+        // 浅拷贝将row中的对应用户数据拷贝进userForm
+        Object.assign(userForm, row)
+      })
+
+    }
 
     return {
-      user, userList, pager, rules, columns, userForm, showModal, handleCrate, checkedUserIds, getUserList, handleQuery, handleReset, handleCurrentChange, handleDel, handlePatchDel, handleSelectionChange, deptList, roleList, handleClose, handleSubmit
+      user,
+      userList,
+      pager,
+      rules,
+      columns,
+      userForm,
+      showModal,
+      action,
+      handleCrate,
+      checkedUserIds,
+      getUserList,
+      handleQuery,
+      handleReset,
+      handleCurrentChange,
+      handleDel,
+      handlePatchDel,
+      handleSelectionChange,
+      deptList,
+      roleList,
+      handleClose,
+      handleSubmit,
+      handleEdit
     }
   }
 }
