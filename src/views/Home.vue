@@ -84,7 +84,7 @@ export default {
   },
   mounted () {
     this.getNoticeCount();
-    this.getMenuList();
+    this.getPermissionList();
   },
   methods: {
     // 退出功能
@@ -93,7 +93,7 @@ export default {
       // 设置localStorage数据为空
       this.$store.commit('saveUserInfo', '');
       // 清空当前数据
-      this.userInfo = null;
+      this.userInfo = {};
       this.$router.push('/login')
     },
     // 控制左侧菜单隐藏
@@ -111,13 +111,14 @@ export default {
       }
     },
     // 获取菜单列表
-    async getMenuList () {
+    async getPermissionList () {
       try {
         // 请求消息api,获取菜单列表
-        const list = await this.$api.getMenuList();
+        // getPermissionList
+        const list = await this.$api.getPermissionList();
         this.menuList = list;
       } catch (error) {
-        console.error(error);
+         console.error(error);
       }
     },
   }

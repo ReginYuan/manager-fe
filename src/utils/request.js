@@ -61,6 +61,7 @@ function request (options) {
     // 转换类型
     options.params = options.data;
   }
+  // 设置isMock,保持config.mock不被覆盖
   let isMock = config.mock;
   // 如果mock接口不是undefined
   if (typeof options.mock != 'undefined') {
