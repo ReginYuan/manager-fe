@@ -16,7 +16,7 @@
     "@vitejs/plugin-vue": "^1.2.1",
     "@vue/compiler-sfc": "^3.0.5",
     "sass": "^1.32.11",
-    "vite": "^2.1.5",
+    "vite": "^2.9.13",
     "vue": "^3.0.11",
     "vue-router": "^4.0.6"
   }
