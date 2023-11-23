@@ -2,14 +2,13 @@
   <router-view></router-view>
 </template>
 
-<script >
+<script>
 export default {
-  name: "APP",
-}
+  name: "app",
+};
 </script>
 
 <style lang="scss">
-@import './assets/style/index.scss';
-@import './assets/style/reset.css';
+@import "./assets/style/reset.css";
+@import "./assets/style/index.scss";
 </style>
-

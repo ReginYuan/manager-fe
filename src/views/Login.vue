@@ -1,15 +1,19 @@
 <template>
   <div class="login-wrapper">
     <div class="modal">
-      <el-form ref="userFrom" :model="user" status-icon :rules="rules">
-        <div class="title">紫荆企业人员管理平台</div>
+      <el-form ref="userForm" :model="user" status-icon :rules="rules">
+        <div class="title">火星</div>
         <el-form-item prop="userName">
-          <el-input prefix-icon="el-icon-user" v-model="user.userName" />
+          <el-input
+            type="text"
+            prefix-icon="el-icon-user"
+            v-model="user.userName"
+          />
         </el-form-item>
         <el-form-item prop="userPwd">
           <el-input
+            type="password"
             prefix-icon="el-icon-view"
-            show-password
             v-model="user.userPwd"
           />
         </el-form-item>
@@ -22,50 +26,71 @@
     </div>
   </div>
 </template>
+
 <script>
-// vue2写法
+import storage from "./../utils/storage";
 export default {
-  name: "Login",
-  data () {
+  name: "login",
+  data() {
     return {
       user: {
-        userName: '',
-        userPwd: ''
+        userName: "admin",
+        userPwd: "123456",
       },
-      // 校验规则
       rules: {
         userName: [
-          { required: true, message: "请输入用户名", trigger: "blur" }
+          {
+            required: true,
+            message: "请输入用户名",
+            trigger: "blur",
+          },
         ],
         userPwd: [
-          { required: true, message: "请输入密码", trigger: "blur" }
-        ]
-      }
-    }
+          {
+            required: true,
+            message: "请输入密码",
+            trigger: "blur",
+          },
+        ],
+      },
+    };
   },
   methods: {
-    // 登录功能
-    login () {
-      // 请求登录接口
-      this.$refs.userFrom.validate((valid) => {
+    login() {
+      this.$refs.userForm.validate((valid) => {
         if (valid) {
-          // 向登录接口提交请求
-          this.$api.login(this.user).then((res) => {
-            // 保存数据
-            this.$store.commit('saveUserInfo', res)
-            console.log('login res', res)
-            this.$router.push('/welcome')
-          })
+          this.$api.login(this.user).then(async (res) => {
+            this.$store.commit("saveUserInfo", res);
+            await this.loadAsyncRoutes();
+            this.$router.push("/welcome");
+          });
         } else {
-          return false
+          return false;
         }
-      })
-
-    }
-  }
-}
+      });
+    },
+    async loadAsyncRoutes() {
+      let userInfo = storage.getItem("userInfo") || {};
+      if (userInfo.token) {
+        try {
+          const { menuList } = await this.$api.getPermissionList();
+          let routes = utils.generateRoute(menuList);
+          routes.map((route) => {
+            let url = `./../views/${route.component}.vue`;
+            route.component = () => import(url);
+            this.router.addRoute("home", route);
+          });
+        } catch (error) {}
+      }
+    },
+    goHome() {
+      this.$router.push("/welcome");
+    },
+  },
+};
 </script>
-<style  lang="scss" >
+
+<style lang="scss">
 .login-wrapper {
   display: flex;
   justify-content: center;
@@ -80,7 +105,7 @@ export default {
     border-radius: 4px;
     box-shadow: 0px 0px 10px 3px #c7c9cb4d;
     .title {
-      font-size: 30px;
+      font-size: 50px;
       line-height: 1.5;
       text-align: center;
       margin-bottom: 30px;

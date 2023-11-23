@@ -1,24 +1,23 @@
 <template>
   <div class="welcome">
     <div class="content">
-      <div class="sub-title">欢迎使用</div>
-      <div class="title">紫荆科技人员管理系统</div>
+      <div class="sub-title">欢迎体验</div>
+      <div class="title">慕课通用后台管理系统</div>
       <div class="desc">
-        -紫荆科技人员管理系统,管理本公司人员日常工作以及考勤
+        - Vue3.0+ElementPlus+Node+Mongo打造通用后台管理系统
       </div>
     </div>
     <div class="img"></div>
   </div>
 </template>
+
 <script>
-// vue3写法
-import { defineComponent } from 'vue'
-export default defineComponent({
-  name: 'Welcome',
-  props: ['msg'],
-})
+export default {
+  name: "welcome",
+};
 </script>
-<style  lang="scss" scoped>
+
+<style lang="scss">
 .welcome {
   display: flex;
   justify-content: center;
@@ -46,7 +45,7 @@ export default defineComponent({
   }
   .img {
     margin-left: 105px;
-    background-image: url('./../assets/images/welcome.png');
+    background-image: url("./../assets/images/welcome.png");
     width: 371px;
     height: 438px;
   }

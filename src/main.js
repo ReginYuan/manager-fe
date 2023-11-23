@@ -1,22 +1,29 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import router from './router/index.js'
+import router from './router'
 import ElementPlus from 'element-plus'
 import 'element-plus/lib/theme-chalk/index.css';
-import request from './utils/request.js'
-import storage from './utils/storage.js'
-import api from './api/index.js'
-import store from './store/index.js'
-// 创建app实例
-const app = createApp(App)
-// 使用ElementPlus组件库
-app.use(ElementPlus, { szie: 'small' })
-// 现在获取环境变量的方式
+import request from './utils/request'
+import storage from './utils/storage'
+import api from './api'
+import store from './store'
+
 console.log("环境变量=>", import.meta.env)
-// 全局挂载request
+const app = createApp(App);
+app.directive('has', {
+    beforeMount: function (el, binding) {
+        let actionList = storage.getItem('actionList');
+        let value = binding.value;
+        let hasPermission = actionList.includes(value)
+        if (!hasPermission) {
+            el.style = 'display:none';
+            setTimeout(() => {
+                el.parentNode.removeChild(el);
+            }, 0)
+        }
+    }
+})
 app.config.globalProperties.$request = request;
-//全局挂载api
 app.config.globalProperties.$api = api;
-// 全局挂载storage
 app.config.globalProperties.$storage = storage;
-app.use(router).use(store).mount('#app')
+app.use(router).use(store).use(ElementPlus, { size: 'small' }).mount('#app')

@@ -1,2 +1,0 @@
-# vue3-manager
-
