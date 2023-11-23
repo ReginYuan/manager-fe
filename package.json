@@ -8,15 +8,16 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "element-plus": "^1.0.2-beta.32",
-    "vite": "^2.0.1",
-    "vue": "^3.0.5",
-    "vue-router": "^4.0.4",
+    "element-plus": "^1.0.2-beta.40",
+    "mongoose": "^5.12.13",
     "vuex": "^4.0.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^1.1.4",
+    "@vitejs/plugin-vue": "^1.2.1",
     "@vue/compiler-sfc": "^3.0.5",
-    "sass": "^1.32.8"
+    "sass": "^1.32.11",
+    "vite": "^2.1.5",
+    "vue": "^3.0.11",
+    "vue-router": "^4.0.6"
   }
 }
